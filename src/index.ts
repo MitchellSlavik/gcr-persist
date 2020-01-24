@@ -187,6 +187,16 @@ const init = async (
       if (writeFileErr) {
         throw writeFileErr;
       }
+
+      if (!ignoreLockfile) {
+        const lockFile = bucket.file(`${folderName}/${key}.lock`);
+
+        const [lockFileDeleteErr] = await catchify(lockFile.delete());
+
+        if (lockFileDeleteErr) {
+          throw lockFileDeleteErr;
+        }
+      }
     },
   };
 };
